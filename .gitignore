@@ -1,0 +1,42 @@
+Directorios de Python
+
+pycache/
+*.pyc
+*.pyo
+*.pyd
+
+Entorno Virtual (venv/env)
+
+.venv/
+venv/
+env/
+
+Base de Datos Local
+
+Ignora la base de datos de desarrollo (db.sqlite3) para no subirla
+
+/db.sqlite3
+
+Archivos Estáticos de Producción
+
+Ignora la carpeta donde se recogen los archivos estáticos compilados para Render
+
+/staticfiles/
+
+Archivos de Medios (Media Files)
+
+Ignora los archivos que los usuarios suben (ej. fotos), porque ocupan mucho espacio.
+
+Si tu app tiene una carpeta 'media' o 'uploads', ignórala.
+
+/media/
+/uploads/
+
+Archivos de Configuración y Claves Secretas
+
+*.env
+.vscode/
+
+Ignorar las claves secretas de Django si las tienes en un archivo de configuración
+
+/sistema_celulares/settings.py

@@ -1,0 +1,83 @@
+{% extends 'catalogo/base.html' %}
+{% load static %}
+
+{% block title %}Detalle de {{ celular.modelo }}{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card p-3 mb-4">
+            {% if celular.imagen %}
+                <img src="{{ celular.imagen.url }}" class="img-fluid rounded mb-3" alt="{{ celular.modelo }}" style="max-height: 450px; object-fit: contain;">
+            {% else %}
+                <div class="text-center p-5 border rounded">No hay imagen disponible</div>
+            {% endif %}
+            
+            <h2>Especificaciones Técnicas</h2>
+            <hr>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Marca:</strong> {{ celular.marca.nombre }}</li>
+                <li class="list-group-item"><strong>Modelo:</strong> {{ celular.modelo }}</li>
+                <li class="list-group-item"><strong>RAM:</strong> {{ celular.ram }}</li>
+                <li class="list-group-item"><strong>Almacenamiento:</strong> {{ celular.almacenamiento }}</li>
+                <li class="list-group-item"><strong>Cámara:</strong> {{ celular.camara }}</li>
+                <li class="list-group-item"><strong>Batería:</strong> {{ celular.bateria }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card p-4 sticky-top" style="top: 20px;">
+            <span class="text-muted">Celular / {{ celular.marca.nombre }}</span>
+            <h1 class="display-5 fw-bold">{{ celular.modelo }}</h1>
+            
+            <p class="lead mt-3">{{ celular.descripcion|default:"Sin descripción." }}</p>
+            
+            <div class="d-flex align-items-center mb-4">
+                <h3 class="text-success me-3">Precio: ${{ celular.precio }}</h3>
+                {% if celular.stock_actual > 0 %}
+                    <span class="badge bg-success fs-6">Stock: {{ celular.stock_actual }} unidades</span>
+                {% else %}
+                    <span class="badge bg-danger fs-6">AGOTADO</span>
+                {% endif %}
+            </div>
+
+            {% if celular.stock_actual > 0 %}
+                <hr>
+                <h4 class="mb-3">Sistema de Apartado Rápido</h4>
+                <p class="text-muted small">Reserva ahora y retira en tienda.</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn btn-warning btn-lg w-100 mt-3">
+                        APARTAR AHORA
+                    </button>
+                </form>
+            {% else %}
+                <div class="alert alert-danger mt-3">Este modelo está agotado y no puede ser reservado.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

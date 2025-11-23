@@ -1,0 +1,44 @@
+{% extends 'catalogo/base.html' %}
+
+{% block title %}Catálogo{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Catálogo de Celulares Disponibles</h1>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for celular in celulares %}
+    <div class="col">
+        <div class="card h-100">
+            
+            {% if celular.imagen %}
+                <img src="{{ celular.imagen.url }}" class="card-img-top" alt="{{ celular.modelo }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+                <div class="card-img-top bg-light text-center d-flex align-items-center justify-content-center" style="height: 200px; color: #6c757d;">
+                    
+                    <p class="m-0">Sin Imagen</p>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ celular.marca.nombre }} {{ celular.modelo }}</h5>
+                <p class="card-text text-muted">{{ celular.descripcion|truncatechars:70 }}</p>
+                
+                <h4 class="text-primary">${{ celular.precio }}</h4>
+                
+                {% if celular.stock_actual > 0 %}
+                    <span class="badge bg-success">Disponible</span>
+                {% else %}
+                    <span class="badge bg-danger">Agotado</span>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-white border-0">
+                <a href="{% url 'detalle_celular' celular.pk %}" class="btn btn-primary w-100">Ver Detalles</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p class="alert alert-warning">No se encontraron productos disponibles.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}
